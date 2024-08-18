@@ -1,0 +1,110 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3" style="background-color: cadetblue;height: 90vh;">
+      <div>
+
+        <mat-card appearance="outlined" class="m-3 p-3">
+          <form [formGroup]="form">
+            <mat-form-field appearance="fill">
+              <mat-label>Write the task</mat-label>
+              <input matInput placeholder="Task Title" formControlName="item">
+              <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+              <mat-hint>Task Input</mat-hint>
+            </mat-form-field>
+            @if(!isEditEnable){
+            <button mat-raised-button color="primary" (click)="addTask()" [disabled]="form.invalid">Add</button>
+            }
+            @if(isEditEnable){
+            <button mat-raised-button color="primary" (click)="updateTask()" [disabled]="form.invalid"> Update</button>
+            }
+          </form>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <!-- drag and drop -->
+      <div class="cdkDropList">
+        <div class="row">
+          <!-- first drop list of todo -->
+          <div class="col-md-4">
+            <!-- first drop list -->
+            <div class="example-container">
+              <h2 class="head-title">To Do
+                @if(tasks.length>0){
+                <span>- {{tasks.length}} -</span>
+                }
+              </h2>
+              <div cdkDropList #todoList1="cdkDropList" [cdkDropListData]="tasks" [cdkDropListConnectedTo]="[todoList2]"
+                class="example-list" (cdkDropListDropped)="drop($event)">
+                @for (task of tasks; track $index) {
+                <div class="example-box" cdkDrag>{{task.Title}}</div>
+                <div class="box">
+                  <button mat-icon-button color="warn" (click)="deleteTask($index)">
+                    <mat-icon>delete</mat-icon> </button>
+                  <button mat-icon-button color="primary" (click)="onEditTask(task,$index)">
+                    <mat-icon>edit</mat-icon> </button>
+                </div>
+                }
+              </div>
+            </div>
+            <!-- second drop list of done -->
+
+          </div>
+          <!-- second drop list of done -->
+
+          <!-- third drop list of done -->
+          <div class="col-md-4">
+            <!-- first drop list -->
+            <div class="example-container">
+              <h2 class="head-title">Inprogress
+                @if(inProgress.length>0){
+                <span>- {{inProgress.length}} -</span>
+                }
+              </h2>
+              <div cdkDropList #todoList2="cdkDropList" [cdkDropListData]="inProgress"
+                [cdkDropListConnectedTo]="[todoList3,todoList1]" class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                @for (inProgress of inProgress; track $index) {
+                <div class="example-box" cdkDrag>{{inProgress.Title}}</div>
+                <div class="box">
+
+                  <button mat-icon-button color="warn" (click)="deleteInProgressTask($index)">
+                    <mat-icon>delete</mat-icon> </button>
+                  <button mat-icon-button color="accent">
+                    <mat-icon style="-webkit-text-fill-color: green;">check_circle</mat-icon> </button>
+                </div>
+                }
+              </div>
+            </div>
+            <!-- second drop list of done -->
+
+          </div>
+          <div class="col-md-4">
+            <!-- first drop list -->
+            <div class="example-container">
+              <h2 class="head-title">Done
+                @if(done.length>0){
+                <span>- {{done.length}} -</span>
+                }
+              </h2>
+              <div cdkDropList #todoList3="cdkDropList" [cdkDropListData]="done"
+                [cdkDropListConnectedTo]="[todoList1,todoList2]" class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                @for (done of done; track $index) {
+                <div class="example-box" cdkDrag>{{done.Title}}</div>
+                <div class="box">
+                  <button mat-icon-button color="warn" (click)="deleteDoneTask($index)">
+                    <mat-icon>delete</mat-icon> </button>
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
